@@ -55,7 +55,6 @@ try:
         /* 隐藏所有 Streamlit 原生菜单、部署按钮和页脚 */
         #MainMenu {visibility: hidden !important;}
         footer {visibility: hidden !important;}
-        header {visibility: hidden !important;}
         .stDeployButton {display: none !important;}
         .stAppDeployButton {display: none !important;}
         [data-testid="stToolbar"] {display: none !important;}

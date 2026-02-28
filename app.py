@@ -52,13 +52,6 @@ try:
             background-color: #f8f9fa !important;
         }
         
-        /* 隐藏所有 Streamlit 原生菜单、部署按钮和页脚 */
-        #MainMenu {visibility: hidden !important;}
-        footer {visibility: hidden !important;}
-        .stDeployButton {display: none !important;}
-        .stAppDeployButton {display: none !important;}
-        [data-testid="stToolbar"] {display: none !important;}
-        
         /* 优化容器 padding */
         .block-container {
             padding-top: 1rem !important;

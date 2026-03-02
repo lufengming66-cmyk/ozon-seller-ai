@@ -982,3 +982,27 @@ def get_ai_insight(calc_data, api_key):
             return "❌ API 调用频率超限，请稍后再试。"
         else:
             return f"❌ AI 调用失败：{error_msg}"
+
+
+def chat_with_agent(agent_role: str, user_input: str, api_key: str, has_image: bool = False):
+    """通用的多 Agent 调度引擎"""
+    from openai import OpenAI
+    try:
+        client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+        
+        # 巧妙的视觉降级处理：防止 DeepSeek-chat 报错
+        if has_image:
+            user_input = f"【系统提示：用户上传了一张产品参考图。请主要基于以下文字描述，为其提供视觉溢价升级方案】\n\n用户描述：{user_input}"
+            
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": agent_role},
+                {"role": "user", "content": user_input}
+            ],
+            temperature=0.7,
+            max_tokens=800
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"❌ Agent 唤醒失败，请检查 API Key 或网络状态。详细错误: {str(e)}"

@@ -129,6 +129,41 @@ def init_database():
                     VALUES (?, ?, ?, ?, ?, ?)
                 """, default_tiers)
             
+            # --- AI 任务社区新增表 ---
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS ai_tasks (
+                    task_id TEXT PRIMARY KEY,
+                    status TEXT DEFAULT 'pending',
+                    user_id TEXT,
+                    payload TEXT,
+                    cost INTEGER,
+                    result TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS user_credits (
+                    user_id TEXT PRIMARY KEY,
+                    credits INTEGER DEFAULT 10000
+                )
+            """)
+            
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS compliance_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT,
+                    action TEXT,
+                    detail TEXT,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            # 初始化测试用户和平台积分账号
+            cursor.execute("INSERT OR IGNORE INTO user_credits (user_id, credits) VALUES ('seller_001', 10000)")
+            cursor.execute("INSERT OR IGNORE INTO user_credits (user_id, credits) VALUES ('platform', 0)")
+            
             conn.commit()
             print("✅ 数据库初始化成功")
             
